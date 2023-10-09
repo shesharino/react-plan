@@ -7,11 +7,18 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
+interface Item {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+}
+
 let nextId = 0;
 
 export default function Profile() {
-  const [items, setItems] = useState([]);
-  const [activeId, setActiveId] = useState(null);
+  const [items, setItems] = useState<Item[]>([]);
+  const [activeId, setActiveId] = useState<number>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
   return (
