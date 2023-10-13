@@ -7,13 +7,6 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
-interface Item {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-}
-
 let nextId = 0;
 
 export default function Profile() {
