@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 
 let nextId = 0;
 
-export default function Profile() {
+export default function TodoList() {
   const [items, setItems] = useState<Item[]>([]);
   const [activeId, setActiveId] = useState<number>(null);
   const [newTitle, setNewTitle] = useState('');
@@ -28,19 +28,20 @@ export default function Profile() {
           setNewTitle('');
           setNewDescription('');
         }}>Add New</Button>
-        <Form.Control placeholder="Title" value={items.find(i => i.id === activeId)?.title ?? newTitle}
-          onChange={e => items.some(i => i.id === activeId)
-            ? setItems(items.map(i => i.id === activeId ? { ...i, title: e.target.value } : i))
-            : setNewTitle(e.target.value)} />
-        <Form.Control placeholder="Description" value={items.find(i => i.id === activeId)?.description ?? newDescription}
-          onChange={e => items.some(i => i.id === activeId)
-            ? setItems(items.map(i => i.id === activeId ? { ...i, description: e.target.value } : i))
-            : setNewDescription(e.target.value)} />
+        {items.some(i => i.id === activeId) ? <>
+          <Form.Control placeholder="Edit Title" value={items.find(i => i.id === activeId)?.title}
+            onChange={e => setItems(items.map(i => i.id === activeId ? { ...i, title: e.target.value } : i))} />
+          <Form.Control placeholder="Edit Description" value={items.find(i => i.id === activeId)?.description}
+            onChange={e => setItems(items.map(i => i.id === activeId ? { ...i, description: e.target.value } : i))} />
+        </> : <>
+          <Form.Control placeholder="New Title" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
+          <Form.Control placeholder="New Description" value={newDescription} onChange={e => setNewDescription(e.target.value)} />
+        </>}
       </InputGroup>
       <br />
-      <Row xs={2}>
+      <Row role="item-grid" xs={2}>
         {items.map(item =>
-          <Col key={item.id}>
+          <Col role="item-cell" key={item.id}>
             <Card bg={item.id === activeId && 'secondary'}>
               <Card.Body>
                 <Card.Title>{item.title}</Card.Title>

@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "lib": [
+      "es6",
+      "dom",
+      "es2017"
+    ]
   },
   "include": [
     "./src/**/*"
