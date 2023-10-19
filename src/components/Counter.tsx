@@ -15,5 +15,5 @@ export default function Counter() {
       <Button variant="success" onClick={() => setCount(c => c + 1)}>Increase</Button>
       <Button variant="danger" onClick={() => setCount(c => c - 1)}>Decrease</Button>
     </InputGroup>
-  )
+  );
 }
