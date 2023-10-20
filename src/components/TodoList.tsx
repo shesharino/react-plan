@@ -15,10 +15,9 @@ export default function TodoList() {
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
 
-  const updateItemField = useCallback(
-    (field: string, value: string) => setItems(items.map(i => i.id === activeId ? { ...i, [field]: value } : i)),
-    [items, activeId]);
-  const deleteItem = useCallback((id: number) => setItems(items.filter(i => i.id !== id)), [items]);
+  const updateItemField = useCallback((id: number, field: string, value: string) =>
+    setItems(items => items.map(i => i.id === id ? { ...i, [field]: value } : i)), []);
+  const deleteItem = useCallback((id: number) => setItems(items => items.filter(i => i.id !== id)), []);
 
   return (
     <>
@@ -36,9 +35,9 @@ export default function TodoList() {
         }}>Add New</Button>
         {items.some(i => i.id === activeId) ? <>
           <Form.Control placeholder="Edit Title" value={items.find(i => i.id === activeId)?.title}
-            onChange={e => updateItemField('title', e.target.value)} />
+            onChange={e => updateItemField(activeId, 'title', e.target.value)} />
           <Form.Control placeholder="Edit Description" value={items.find(i => i.id === activeId)?.description}
-            onChange={e => updateItemField('description', e.target.value)} />
+            onChange={e => updateItemField(activeId, 'description', e.target.value)} />
         </> : <>
           <Form.Control placeholder="New Title" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
           <Form.Control placeholder="New Description" value={newDescription} onChange={e => setNewDescription(e.target.value)} />
