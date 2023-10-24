@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useFormControl } from './../hooks/useFormControl';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Card from 'react-bootstrap/Card';
@@ -12,8 +13,8 @@ let nextId = 0;
 export default function TodoList() {
   const [items, setItems] = useState<Item[]>([]);
   const [activeId, setActiveId] = useState<number>(null);
-  const [newTitle, setNewTitle] = useState('');
-  const [newDescription, setNewDescription] = useState('');
+  const { setValue: setNewTitle, ...newTitle }  = useFormControl('');
+  const { setValue: setNewDescription, ...newDescription }  = useFormControl('');
 
   const updateItemField = useCallback((id: number, field: string, value: string) =>
     setItems(items => items.map(i => i.id === id ? { ...i, [field]: value } : i)), []);
@@ -26,8 +27,8 @@ export default function TodoList() {
           setActiveId(nextId);
           setItems([...items, {
             id: nextId++,
-            title: newTitle,
-            description: newDescription,
+            title: newTitle.value,
+            description: newDescription.value,
             date: new Date().toLocaleString()
           }]);
           setNewTitle('');
@@ -39,8 +40,8 @@ export default function TodoList() {
           <Form.Control placeholder="Edit Description" value={items.find(i => i.id === activeId)?.description}
             onChange={e => updateItemField(activeId, 'description', e.target.value)} />
         </> : <>
-          <Form.Control placeholder="New Title" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
-          <Form.Control placeholder="New Description" value={newDescription} onChange={e => setNewDescription(e.target.value)} />
+          <Form.Control placeholder="New Title" {...newTitle} />
+          <Form.Control placeholder="New Description" {...newDescription} />
         </>}
       </InputGroup>
       <br />
