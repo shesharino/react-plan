@@ -7,17 +7,17 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
+import EditFields from './EditFields';
 
 let nextId = 0;
 
 export default function TodoList() {
   const [items, setItems] = useState<Item[]>([]);
   const [activeId, setActiveId] = useState<number>(null);
-  const { setValue: setNewTitle, ...newTitle }  = useFormControl('');
-  const { setValue: setNewDescription, ...newDescription }  = useFormControl('');
+  const { resetValue: resetNewTitle, ...newTitle } = useFormControl();
+  const { resetValue: resetNewDescription, ...newDescription } = useFormControl();
 
-  const updateItemField = useCallback((id: number, field: string, value: string) =>
-    setItems(items => items.map(i => i.id === id ? { ...i, [field]: value } : i)), []);
+  const activeItemExists = items.some(i => i.id === activeId);
   const deleteItem = useCallback((id: number) => setItems(items => items.filter(i => i.id !== id)), []);
 
   return (
@@ -31,14 +31,11 @@ export default function TodoList() {
             description: newDescription.value,
             date: new Date().toLocaleString()
           }]);
-          setNewTitle('');
-          setNewDescription('');
+          resetNewTitle();
+          resetNewDescription();
         }}>Add New</Button>
-        {items.some(i => i.id === activeId) ? <>
-          <Form.Control placeholder="Edit Title" value={items.find(i => i.id === activeId)?.title}
-            onChange={e => updateItemField(activeId, 'title', e.target.value)} />
-          <Form.Control placeholder="Edit Description" value={items.find(i => i.id === activeId)?.description}
-            onChange={e => updateItemField(activeId, 'description', e.target.value)} />
+        {activeItemExists ? <>
+          <EditFields items={items} setItems={setItems} activeId={activeId} />
         </> : <>
           <Form.Control placeholder="New Title" {...newTitle} />
           <Form.Control placeholder="New Description" {...newDescription} />
