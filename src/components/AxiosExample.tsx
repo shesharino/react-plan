@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import Table from 'react-bootstrap/Table';
 
-const baseURL = "https://jsonplaceholder.typicode.com/posts";
+const client = axios.create({
+  baseURL: 'https://jsonplaceholder.typicode.com'
+});
 
 export default function AxiosExample() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    axios.get(baseURL).then((response) => {
+    client.get('/posts').then((response) => {
       setPosts(response.data);
     });
   }, []);
