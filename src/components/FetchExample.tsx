@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Image from 'react-bootstrap/Image';
@@ -30,65 +30,67 @@ export default function AxiosExample() {
     }
   }, [pokemonName]);
 
-  return (
-    <>
-      <Stack direction="horizontal" gap={1}>
-        Select a Pokemon:
-        {pokemonList.length > 0 &&
-          <DropdownButton title={capitalize(pokemonName)} onSelect={eventKey => setPokemonName(eventKey)}>
-            {pokemonList.map(pokemon =>
-              <Dropdown.Item key={pokemon} eventKey={pokemon} active={pokemon === pokemonName}>
-                {capitalize(pokemon)}
-              </Dropdown.Item>
-            )}
-          </DropdownButton>
-        }
-        {pokemonData && <>
-          <Image src={pokemonData.sprites.front_default} />
-          <Image src={pokemonData.sprites.back_default} />
-        </>}
-      </Stack>
-      {pokemonData &&
-        <Table>
-          <tbody>
-            <tr>
-              <td>Types:</td>
-              <td>{pokemonData.types.map((x: any, index: number) => <>
+  return (<>
+    <Stack direction="horizontal" gap={1}>
+      Select a Pokemon:
+      {pokemonList.length > 0 &&
+        <DropdownButton title={capitalize(pokemonName)} onSelect={eventKey => setPokemonName(eventKey)}>
+          {pokemonList.map(pokemon =>
+            <Dropdown.Item key={pokemon} eventKey={pokemon} active={pokemon === pokemonName}>
+              {capitalize(pokemon)}
+            </Dropdown.Item>
+          )}
+        </DropdownButton>
+      }
+      {pokemonData && <>
+        <Image src={pokemonData.sprites.front_default} />
+        <Image src={pokemonData.sprites.back_default} />
+      </>}
+    </Stack>
+    {pokemonData &&
+      <Table>
+        <tbody>
+          <tr>
+            <td>Types:</td>
+            <td>{pokemonData.types.map((x: any, index: number) =>
+              <Fragment key={index}>
                 {index > 0 && ', '}
                 <a href={x.type.url}>{capitalize(x.type.name)}</a>
-              </>)}</td>
-            </tr>
-            <tr>
-              <td>Abilities:</td>
-              <td>{pokemonData.abilities.map((x: any, index: number) => <>
+              </Fragment>
+            )}</td>
+          </tr>
+          <tr>
+            <td>Abilities:</td>
+            <td>{pokemonData.abilities.map((x: any, index: number) =>
+              <Fragment key={index}>
                 {index > 0 && ', '}
                 <a href={x.ability.url}>{capitalize(x.ability.name)}</a>
-              </>)}</td>
-            </tr>
-            <tr>
-              <td>Stats:</td>
-              <td>
-                <Table>
-                  <tbody>
-                    {pokemonData.stats.map((x: any, index: number) =>
-                      <tr>
-                        <td>
-                          <a href={x.stat.url}>{capitalize(x.stat.name)}</a>
-                        </td>
-                        <td>{x.base_stat}</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </Table>
-              </td>
-            </tr>
-            <tr>
-              <td>Height / Weight:</td>
-              <td>{pokemonData.height / 10} m / {pokemonData.weight / 10} kg</td>
-            </tr>
-          </tbody>
-        </Table>
-      }
-    </>
-  );
+              </Fragment>
+            )}</td>
+          </tr>
+          <tr>
+            <td>Stats:</td>
+            <td>
+              <Table>
+                <tbody>
+                  {pokemonData.stats.map((x: any) =>
+                    <tr key={x.stat.name}>
+                      <td>
+                        <a href={x.stat.url}>{capitalize(x.stat.name)}</a>
+                      </td>
+                      <td>{x.base_stat}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </td>
+          </tr>
+          <tr>
+            <td>Height / Weight:</td>
+            <td>{pokemonData.height / 10} m / {pokemonData.weight / 10} kg</td>
+          </tr>
+        </tbody>
+      </Table>
+    }
+  </>);
 }

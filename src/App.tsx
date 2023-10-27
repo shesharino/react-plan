@@ -24,8 +24,8 @@ export default function App() {
         <TodoList />
         <hr />
         <ButtonGroup>
-          <Button onClick={() => setShowAxiosModal(true)}>Axios API Example</Button>
-          <Button onClick={() => setShowFetchModal(true)} variant="secondary">Fetch API Example</Button>
+          <Button onClick={() => setShowAxiosModal(true)}>Axios API</Button>
+          <Button onClick={() => setShowFetchModal(true)} variant="secondary">Fetch API</Button>
         </ButtonGroup>
         <Modal show={showAxiosModal} onHide={() => setShowAxiosModal(false)}>
           <Modal.Header closeButton>
