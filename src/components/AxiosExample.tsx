@@ -9,9 +9,10 @@ const client = axios.create({
 export default function AxiosExample() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    client.get('/posts').then((response) => {
-      setPosts(response.data);
-    });
+    (async () => {
+      const posts = await client.get('/posts');
+      setPosts(posts.data);
+    })();
   }, []);
 
   return posts?.length > 0 && (
