@@ -17,22 +17,29 @@ export default function TodoList() {
   const { resetValue: resetNewTitle, ...newTitle } = useFormControl();
   const { resetValue: resetNewDescription, ...newDescription } = useFormControl();
 
-  const activeItemExists = items.some(i => i.id === activeId);
+  const isActiveId = (id: number) => id === activeId;
+
+  const activeItemExists = items.some(i => isActiveId(i.id));
   const deleteItem = useCallback((id: number) => setItems(items => items.filter(i => i.id !== id)), []);
+
+  const handleOnAddNew = () => {
+    setActiveId(nextId);
+    setItems([
+      ...items,
+      {
+        id: nextId++,
+        title: newTitle.value,
+        description: newDescription.value,
+        date: new Date().toLocaleString(),
+      },
+    ]);
+    resetNewTitle();
+    resetNewDescription();
+  };
 
   return (<>
     <InputGroup>
-      <Button variant="success" onClick={() => {
-        setActiveId(nextId);
-        setItems([...items, {
-          id: nextId++,
-          title: newTitle.value,
-          description: newDescription.value,
-          date: new Date().toLocaleString()
-        }]);
-        resetNewTitle();
-        resetNewDescription();
-      }}>Add New</Button>
+      <Button variant="success" onClick={handleOnAddNew}>Add New</Button>
       {activeItemExists ? <>
         <EditFields items={items} setItems={setItems} activeId={activeId} />
       </> : <>
@@ -44,7 +51,7 @@ export default function TodoList() {
     <Row role="item-grid" xs={2}>
       {items.map(item =>
         <Col role="item-cell" key={item.id}>
-          <Card bg={item.id === activeId && 'secondary'}>
+          <Card bg={isActiveId(item.id) && 'secondary'}>
             <Card.Body>
               <Card.Title>{item.title}</Card.Title>
               <Card.Text>{item.description}</Card.Text>
